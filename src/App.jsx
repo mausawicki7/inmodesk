@@ -14,6 +14,7 @@ import PropietarioDetalle from './pages/PropietarioDetalle';
 import Proveedores from './pages/Proveedores';
 import ProveedorDetalle from './pages/ProveedorDetalle';
 import SimularReclamo from './pages/SimularReclamo';
+import Perfil from './pages/Perfil';
 import './App.css';
 
 function ProtectedRoutes() {
@@ -42,6 +43,7 @@ function ProtectedRoutes() {
           <Route path="/proveedores" element={<Proveedores />} />
           <Route path="/proveedores/:id" element={<ProveedorDetalle />} />
           <Route path="/simular-reclamo" element={<SimularReclamo />} />
+          <Route path="/perfil" element={<Perfil />} />
         </Route>
       </Routes>
     </AppProvider>

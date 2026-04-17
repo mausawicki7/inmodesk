@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   AlertTriangle,
@@ -10,6 +10,7 @@ import {
   X
 } from 'lucide-react';
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -22,6 +23,20 @@ const navItems = [
 
 export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { usuario } = useAuth();
+  const navigate = useNavigate();
+
+  const initials = (usuario?.nombre || 'A')
+    .split(' ')
+    .map(w => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+
+  function handleUserClick() {
+    setMobileOpen(false)
+    navigate('/perfil')
+  }
 
   return (
     <>
@@ -91,13 +106,13 @@ export default function Sidebar() {
         </nav>
 
         <div className="sidebar-footer">
-          <div className="sidebar-user">
-            <div className="user-avatar">AM</div>
+          <button className="sidebar-user" onClick={handleUserClick}>
+            <div className="user-avatar">{initials}</div>
             <div className="user-info">
-              <span className="user-name">Admin</span>
-              <span className="user-role">Inmobiliaria Demo</span>
+              <span className="user-name">{usuario?.nombre || 'Admin'}</span>
+              <span className="user-role">{usuario?.inmobiliarias?.nombre || ''}</span>
             </div>
-          </div>
+          </button>
         </div>
       </aside>
 

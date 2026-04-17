@@ -2,6 +2,7 @@ import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { Bell, Search, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import NotificacionesDropdown from '../common/NotificacionesDropdown';
 
 const routeNames = {
   '/': 'Dashboard',
@@ -10,6 +11,7 @@ const routeNames = {
   '/propietarios': 'Propietarios',
   '/proveedores': 'Proveedores',
   '/simular-reclamo': 'Simular Reclamo',
+  '/perfil': 'Mi perfil',
 };
 
 export default function Header() {
@@ -17,11 +19,7 @@ export default function Header() {
   const navigate = useNavigate();
   const { logout, usuario } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
-
-  async function handleLogout() {
-    await logout();
-    navigate('/login');
-  }
+  const [notifOpen, setNotifOpen] = useState(false);
   const pathParts = location.pathname.split('/').filter(Boolean);
 
   const getBreadcrumbs = () => {
@@ -37,6 +35,11 @@ export default function Header() {
   };
 
   const breadcrumbs = getBreadcrumbs();
+
+  async function handleLogout() {
+    await logout();
+    navigate('/login');
+  }
 
   return (
     <header className="header">
@@ -65,10 +68,18 @@ export default function Header() {
             onBlur={() => setSearchOpen(false)}
           />
         </div>
-        <button className="header-notification">
-          <Bell size={20} />
-          <span className="notification-badge">3</span>
-        </button>
+
+        <div className="notif-wrap">
+          <button
+            className="header-notification"
+            onClick={() => setNotifOpen(v => !v)}
+          >
+            <Bell size={20} />
+            <span className="notification-badge">3</span>
+          </button>
+          {notifOpen && <NotificacionesDropdown onClose={() => setNotifOpen(false)} />}
+        </div>
+
         {usuario && (
           <div className="header-user">
             <span className="header-user-name">{usuario.inmobiliarias?.nombre}</span>
