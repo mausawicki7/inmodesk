@@ -3053,3 +3053,134 @@ img { max-width: 100%; display: block; }
   .btn { padding: 9px 14px; font-size: 12px; }
   .btn-sm { padding: 5px 10px; }
 }
+
+/* ================================================================
+   LOGIN
+   ================================================================ */
+
+.login-container {
+  min-height: 100vh;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.login-card {
+  background: var(--surface);
+  border: 1.5px solid var(--rule);
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 24px rgba(20,24,31,0.08);
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+  color: var(--terra);
+}
+
+.login-logo h1 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+
+.login-subtitle {
+  color: var(--ink-mute);
+  font-size: 14px;
+  margin: 0 0 32px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.login-field input {
+  padding: 10px 14px;
+  border: 1.5px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.login-field input:focus {
+  border-color: var(--terra);
+}
+
+.login-error {
+  font-size: 13px;
+  color: var(--urgencia-critica);
+  margin: 0;
+}
+
+.login-btn {
+  padding: 12px;
+  background: var(--terra);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  margin-top: 4px;
+}
+
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* ================================================================
+   LOADING SCREEN
+   ================================================================ */
+
+.loading-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+}
+
+.loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--rule);
+  border-top-color: var(--terra);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
