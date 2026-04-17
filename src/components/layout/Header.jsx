@@ -1,6 +1,7 @@
-import { useLocation, Link } from 'react-router-dom';
-import { Bell, Search } from 'lucide-react';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { Bell, Search, LogOut } from 'lucide-react';
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 const routeNames = {
   '/': 'Dashboard',
@@ -13,7 +14,14 @@ const routeNames = {
 
 export default function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout, usuario } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
+
+  async function handleLogout() {
+    await logout();
+    navigate('/login');
+  }
   const pathParts = location.pathname.split('/').filter(Boolean);
 
   const getBreadcrumbs = () => {
@@ -61,6 +69,14 @@ export default function Header() {
           <Bell size={20} />
           <span className="notification-badge">3</span>
         </button>
+        {usuario && (
+          <div className="header-user">
+            <span className="header-user-name">{usuario.inmobiliarias?.nombre}</span>
+            <button className="header-logout" onClick={handleLogout} title="Cerrar sesión">
+              <LogOut size={18} />
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );
