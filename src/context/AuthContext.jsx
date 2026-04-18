@@ -46,8 +46,10 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut()
   }
 
+  const isSuper = usuario?.rol === 'superadmin';
+
   return (
-    <AuthContext.Provider value={{ session, usuario, loading, login, logout }}>
+    <AuthContext.Provider value={{ session, usuario, loading, login, logout, isSuper }}>
       {children}
     </AuthContext.Provider>
   )

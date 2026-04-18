@@ -53,7 +53,7 @@ export default function IncidenciaDetalle() {
         <div className="detalle-title-row">
           <div>
             <div className="detalle-id-row">
-              <span className="detalle-id">{inc.id}</span>
+              <span className="detalle-id">{inc.codigo}</span>
               <span className="rubro-tag"><span>{rubro?.icon}</span> {inc.rubro}</span>
             </div>
             <h1 className="detalle-title">{inc.titulo}</h1>

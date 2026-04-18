@@ -153,7 +153,7 @@ export default function Dashboard() {
             <tbody>
               {recientes.map(inc => (
                 <tr key={inc.id} className="table-row-clickable" onClick={() => navigate(`/incidencias/${inc.id}`)}>
-                  <td className="td-id">{inc.id}</td>
+                  <td className="td-id">{inc.codigo}</td>
                   <td className="td-title">{inc.titulo}</td>
                   <td>
                     <span className="rubro-tag">

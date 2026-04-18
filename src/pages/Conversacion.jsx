@@ -22,7 +22,7 @@ export default function Conversacion() {
           <ArrowLeft size={18} /> Volver al detalle
         </button>
         <div className="conversacion-info">
-          <h2>{inc.id} — Conversación</h2>
+          <h2>{inc.codigo} — Conversación</h2>
           <p>{inc.titulo}</p>
         </div>
       </div>

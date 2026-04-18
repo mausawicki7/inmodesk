@@ -15,10 +15,12 @@ import Proveedores from './pages/Proveedores';
 import ProveedorDetalle from './pages/ProveedorDetalle';
 import SimularReclamo from './pages/SimularReclamo';
 import Perfil from './pages/Perfil';
+import SuperAdmin from './pages/SuperAdmin';
+import InmobiliariaDetalle from './pages/InmobiliariaDetalle';
 import './App.css';
 
 function ProtectedRoutes() {
-  const { session, loading } = useAuth()
+  const { session, loading, isSuper } = useAuth()
 
   if (loading) return (
     <div className="loading-screen">
@@ -32,7 +34,9 @@ function ProtectedRoutes() {
     <AppProvider>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={isSuper ? <Navigate to="/superadmin" replace /> : <Dashboard />} />
+          <Route path="/superadmin" element={<SuperAdmin />} />
+          <Route path="/superadmin/inmobiliarias/:id" element={<InmobiliariaDetalle />} />
           <Route path="/incidencias" element={<Incidencias />} />
           <Route path="/incidencias/:id" element={<IncidenciaDetalle />} />
           <Route path="/incidencias/:id/conversacion" element={<Conversacion />} />

@@ -7,7 +7,8 @@ import {
   Wrench,
   PlusCircle,
   Menu,
-  X
+  X,
+  ShieldCheck,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
@@ -21,9 +22,14 @@ const navItems = [
   { to: '/simular-reclamo', icon: PlusCircle, label: 'Simular Reclamo' },
 ];
 
+const superAdminItems = [
+  { to: '/superadmin', icon: ShieldCheck, label: 'Panel InmoDesk', section: 'Administración' },
+  { to: '/proveedores', icon: Wrench, label: 'Proveedores globales', section: 'Administración' },
+];
+
 export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { usuario } = useAuth();
+  const { usuario, isSuper } = useAuth();
   const navigate = useNavigate();
 
   const initials = (usuario?.nombre || 'A')
@@ -58,51 +64,69 @@ export default function Sidebar() {
         </div>
 
         <nav className="sidebar-nav">
-          <div className="nav-section">
-            <span className="nav-section-title">Principal</span>
-            {navItems.slice(0, 2).map(item => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) => `nav-item ${isActive ? 'nav-item-active' : ''}`}
-                onClick={() => setMobileOpen(false)}
-              >
-                <item.icon size={20} />
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-          </div>
-
-          <div className="nav-section">
-            <span className="nav-section-title">Directorio</span>
-            {navItems.slice(2, 5).map(item => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) => `nav-item ${isActive ? 'nav-item-active' : ''}`}
-                onClick={() => setMobileOpen(false)}
-              >
-                <item.icon size={20} />
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-          </div>
-
-          <div className="nav-section">
-            <span className="nav-section-title">Demo</span>
-            {navItems.slice(5).map(item => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) => `nav-item ${isActive ? 'nav-item-active' : ''}`}
-                onClick={() => setMobileOpen(false)}
-              >
-                <item.icon size={20} />
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-          </div>
+          {isSuper ? (
+            <div className="nav-section">
+              <span className="nav-section-title">Administración</span>
+              {superAdminItems.map(item => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === '/superadmin'}
+                  className={({ isActive }) => `nav-item ${isActive ? 'nav-item-active' : ''}`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <item.icon size={20} />
+                  <span>{item.label}</span>
+                </NavLink>
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="nav-section">
+                <span className="nav-section-title">Principal</span>
+                {navItems.slice(0, 2).map(item => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.to === '/'}
+                    className={({ isActive }) => `nav-item ${isActive ? 'nav-item-active' : ''}`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <item.icon size={20} />
+                    <span>{item.label}</span>
+                  </NavLink>
+                ))}
+              </div>
+              <div className="nav-section">
+                <span className="nav-section-title">Directorio</span>
+                {navItems.slice(2, 5).map(item => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    className={({ isActive }) => `nav-item ${isActive ? 'nav-item-active' : ''}`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <item.icon size={20} />
+                    <span>{item.label}</span>
+                  </NavLink>
+                ))}
+              </div>
+              <div className="nav-section">
+                <span className="nav-section-title">Demo</span>
+                {navItems.slice(5).map(item => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    className={({ isActive }) => `nav-item ${isActive ? 'nav-item-active' : ''}`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <item.icon size={20} />
+                    <span>{item.label}</span>
+                  </NavLink>
+                ))}
+              </div>
+            </>
+          )}
         </nav>
 
         <div className="sidebar-footer">
@@ -110,7 +134,7 @@ export default function Sidebar() {
             <div className="user-avatar">{initials}</div>
             <div className="user-info">
               <span className="user-name">{usuario?.nombre || 'Admin'}</span>
-              <span className="user-role">{usuario?.inmobiliarias?.nombre || ''}</span>
+              <span className="user-role">{isSuper ? 'SuperAdmin InmoDesk' : (usuario?.inmobiliarias?.nombre || '')}</span>
             </div>
           </button>
         </div>

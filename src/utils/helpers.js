@@ -79,7 +79,4 @@ export const timelineIconConfig = {
   'reapertura': { icon: '🔄', color: '#a8321b' },
 };
 
-export const generateId = () => {
-  const num = Math.floor(Math.random() * 900) + 100;
-  return `INC-${num}`;
-};
+export const generateId = () => crypto.randomUUID();

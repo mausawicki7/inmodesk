@@ -118,7 +118,7 @@ export default function Incidencias() {
               const prov = getProveedor(inc.proveedorId);
               return (
                 <tr key={inc.id} className="table-row-clickable" onClick={() => navigate(`/incidencias/${inc.id}`)}>
-                  <td className="td-id">{inc.id}</td>
+                  <td className="td-id">{inc.codigo}</td>
                   <td className="td-title">{inc.titulo}</td>
                   <td className="td-prop">{prop ? `${prop.direccion}, ${prop.unidad}` : '—'}</td>
                   <td>{inq?.nombre || '—'}</td>

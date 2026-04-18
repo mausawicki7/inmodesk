@@ -1918,6 +1918,44 @@ img { max-width: 100%; display: block; }
   gap: 18px;
 }
 
+/* ========================= FILTER TABS ========================= */
+
+.filter-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 4px;
+  width: fit-content;
+}
+
+.filter-tab {
+  padding: 7px 18px;
+  border-radius: calc(var(--radius) - 2px);
+  border: none;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+.filter-tab:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+.filter-tab.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
 /* ========================= PROVIDER CARDS ========================= */
 
 .provider-card { padding: 22px; }
@@ -2015,6 +2053,29 @@ img { max-width: 100%; display: block; }
   font-family: var(--serif);
   font-variation-settings: "opsz" 14;
   font-style: italic;
+}
+
+.prov-global-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+  background: var(--sky-bg);
+  color: var(--sky);
+  border: 1px solid rgba(60, 107, 133, 0.25);
+}
+
+.provider-fiscal {
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-family: var(--mono);
+  letter-spacing: -0.2px;
+  margin-bottom: 8px;
 }
 
 /* ========================= SIMULAR RECLAMO ========================= */
@@ -2346,6 +2407,89 @@ img { max-width: 100%; display: block; }
 .urgencia-btn-crítica { color: var(--brick); }
 
 .urgencia-btn-active { font-weight: 700; }
+
+/* ── Botones extra ── */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 13px;
+  font-family: var(--serif);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-secondary:hover { background: var(--parchment); }
+
+.btn-icon-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink-mute);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.btn-icon-sm:hover { background: var(--parchment); color: var(--ink); border-color: var(--rule); }
+
+/* ── Formularios ── */
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-size: 14px;
+  font-family: var(--serif);
+  color: var(--ink);
+  background: var(--paper);
+  outline: none;
+  box-sizing: border-box;
+}
+.form-input:focus { border-color: var(--ink); }
+.form-input select { appearance: none; }
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+.form-row .form-group { flex: 1; }
+.form-row .form-group-grow { flex: 2; }
+.form-row .form-group-sm { flex: 0 0 90px; }
+
+.form-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--ink-mute);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+}
+
+.form-error {
+  font-size: 13px;
+  color: var(--brick);
+  margin-bottom: 12px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
 
 .urgencia-btn-baja.urgencia-btn-active { border-color: var(--ink-2); background: var(--surface); }
 .urgencia-btn-media.urgencia-btn-active { border-color: var(--ochre-deep); background: var(--ochre-bg); }
@@ -3532,3 +3676,403 @@ img { max-width: 100%; display: block; }
   color: var(--ink);
   font-weight: 500;
 }
+
+/* ========================= SUSPENDED SCREEN ========================= */
+
+.suspended-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+}
+
+.suspended-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 48px 40px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.suspended-icon { font-size: 40px; }
+
+.suspended-title {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.suspended-msg {
+  font-size: 14px;
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+
+/* ========================= SUPERADMIN PANEL ========================= */
+
+.page-superadmin { animation: pageRise 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 28px 0 14px;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+}
+
+/* Inmobiliaria table cells */
+.inmo-name-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inmo-email {
+  font-size: 11.5px;
+  color: var(--ink-mute);
+  font-family: var(--mono);
+}
+
+.td-num {
+  text-align: center;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+/* Plan badge */
+.plan-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 2px;
+  background: var(--ochre-bg);
+  color: var(--ochre-deep);
+  border: 1px solid rgba(184, 137, 46, 0.25);
+}
+
+/* Estado badges */
+.estado-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 2px;
+}
+
+.estado-activa {
+  background: var(--olive-bg);
+  color: var(--olive-deep);
+}
+
+.estado-suspendida {
+  background: var(--brick-bg);
+  color: var(--brick);
+}
+
+/* Danger button */
+.btn-danger {
+  background: var(--brick-bg);
+  color: var(--brick);
+  border: 1px solid rgba(168, 50, 27, 0.3);
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+
+.btn-danger:hover { background: #ecc5bb; }
+
+/* User rol icons in detalle */
+.user-rol-icon {
+  width: 34px; height: 34px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-super { background: var(--terra-bg); color: var(--terra-deep); }
+.icon-admin { background: var(--olive-bg); color: var(--olive-deep); }
+
+/* Badge variants */
+.badge-terra { background: var(--terra-bg); color: var(--terra-deep); border-color: var(--terra-line); }
+.badge-olive { background: var(--olive-bg); color: var(--olive-deep); border-color: rgba(96,106,58,0.25); }
+.badge-sky   { background: var(--sky-bg);   color: var(--sky);        border-color: rgba(60,107,133,0.25); }
+
+/* Plan limit warning */
+.plan-limit-warning {
+  font-size: 12.5px;
+  color: var(--brick);
+  background: var(--brick-bg);
+  border: 1px solid rgba(168, 50, 27, 0.2);
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  margin-top: 8px;
+}
+
+.limit-reached {
+  color: var(--brick);
+  font-weight: 600;
+}
+
+/* Planes section en superadmin */
+.planes-section {
+  margin-top: 32px;
+}
+
+.planes-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-3);
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+}
+
+.planes-toggle:hover { color: var(--ink); }
+
+.planes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .planes-grid { grid-template-columns: 1fr; }
+}
+
+.plan-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.plan-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.plan-nombre {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.plan-precio {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.plan-periodo {
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-weight: 400;
+}
+
+.plan-descripcion {
+  font-size: 12.5px;
+  color: var(--ink-mute);
+  font-style: italic;
+  font-family: var(--serif);
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.plan-features svg { color: var(--olive); flex-shrink: 0; }
+
+.plan-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px dotted var(--rule);
+  font-size: 11.5px;
+  color: var(--ink-mute);
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+/* Cobros tab */
+.td-monto {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.row-vencida { background: rgba(168, 50, 27, 0.04); }
+.row-proxima { background: rgba(184, 137, 46, 0.05); }
+
+.pago-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 2px;
+}
+
+.pago-ok       { background: var(--olive-bg);  color: var(--olive-deep); }
+.pago-proximo  { background: var(--ochre-bg);  color: var(--ochre-deep); }
+.pago-vencido  { background: var(--brick-bg);  color: var(--brick); }
+
+.tab-alert-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--brick);
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.kpi-card--alert {
+  border-color: rgba(168, 50, 27, 0.35);
+  background: rgba(168, 50, 27, 0.03);
+}
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 12px;
+}
+
+.btn-olive {
+  background: var(--olive-bg);
+  color: var(--olive-deep);
+  border: 1px solid rgba(96, 106, 58, 0.3);
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.15s;
+  font-family: var(--sans);
+}
+
+.btn-olive:hover { background: #d4d4b8; }
+.btn-olive:disabled { opacity: 0.5; cursor: default; }
+
+/* Modal cobro */
+.cobro-resumen {
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cobro-resumen-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13.5px;
+  color: var(--ink-3);
+}
+
+.cobro-resumen-row span { color: var(--ink-mute); }
+
+.cobro-resumen-total {
+  padding-top: 10px;
+  border-top: 1px dotted var(--rule);
+  font-size: 15px;
+}
+
+.cobro-resumen-total strong { color: var(--olive-deep); font-size: 17px; }
+
+/* File upload */
+.file-upload-area {
+  display: block;
+  border: 1.5px dashed var(--rule);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: center;
+}
+
+.file-upload-area:hover {
+  border-color: var(--ink-3);
+  background: var(--surface-2);
+}
+
+.file-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-mute);
+}
+
+.file-placeholder span { font-size: 13px; }
+.file-hint { font-size: 11px !important; color: var(--ink-faint) !important; }
+
+.file-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  font-family: var(--mono);
+}
+
+.file-size { font-size: 11px; color: var(--ink-mute); }
+

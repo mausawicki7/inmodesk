@@ -1,17 +1,26 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Card from '../components/common/Card';
 import Badge from '../components/common/Badge';
+import Modal from '../components/common/Modal';
 import { formatDate, formatCurrency } from '../utils/helpers';
 import {
   ArrowLeft, Building2, MapPin, User, Phone, Mail,
-  Calendar, Ruler, DoorOpen, Banknote
+  Calendar, Ruler, DoorOpen, Banknote, Pencil
 } from 'lucide-react';
+
+const TIPOS = ['Departamento', 'PH', 'Casa', 'Local', 'Oficina'];
+const ESTADOS_CONTRATO = ['Vigente', 'Vencido', 'Sin contrato'];
 
 export default function PropiedadDetalle() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { propiedades, getPropietario, getInquilino, getIncidenciasPorPropiedad } = useApp();
+  const { propiedades, propietarios, getPropietario, getInquilino, getIncidenciasPorPropiedad, editarPropiedad } = useApp();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [form, setForm] = useState({});
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
 
   const prop = propiedades.find(p => p.id === id);
   if (!prop) return <div className="empty-state"><p>Propiedad no encontrada</p><button className="btn btn-primary" onClick={() => navigate('/propiedades')}>Volver</button></div>;
@@ -21,11 +30,37 @@ export default function PropiedadDetalle() {
   const incidencias = getIncidenciasPorPropiedad(prop.id);
   const activas = incidencias.filter(i => !['Resuelta', 'Cerrada'].includes(i.estado));
 
+  const openEditar = () => {
+    setForm({
+      direccion: prop.direccion || '', unidad: prop.unidad || '',
+      tipo: prop.tipo || 'Departamento', barrio: prop.barrio || '', ciudad: prop.ciudad || '',
+      ambientes: prop.ambientes || '', metros: prop.metros || '', alquilerMensual: prop.alquilerMensual || '',
+      estadoContrato: prop.estadoContrato || 'Vigente',
+      fechaInicioContrato: prop.fechaInicioContrato || '', fechaFinContrato: prop.fechaFinContrato || '',
+      propietarioId: prop.propietarioId || '',
+    });
+    setError('');
+    setModalOpen(true);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.direccion.trim()) { setError('La dirección es obligatoria.'); return; }
+    setSaving(true);
+    const ok = await editarPropiedad(id, form);
+    setSaving(false);
+    if (!ok) { setError('Error al guardar.'); return; }
+    setModalOpen(false);
+  };
+
   return (
     <div className="detalle-page">
       <div className="detalle-header">
         <button className="btn btn-ghost" onClick={() => navigate('/propiedades')}>
           <ArrowLeft size={18} /> Volver
+        </button>
+        <button className="btn btn-secondary" onClick={openEditar}>
+          <Pencil size={15} /> Editar
         </button>
         <div className="detalle-title-row">
           <div>
@@ -90,7 +125,7 @@ export default function PropiedadDetalle() {
                   <tbody>
                     {activas.map(inc => (
                       <tr key={inc.id} className="table-row-clickable" onClick={() => navigate(`/incidencias/${inc.id}`)}>
-                        <td className="td-id">{inc.id}</td>
+                        <td className="td-id">{inc.codigo || inc.id}</td>
                         <td className="td-title">{inc.titulo}</td>
                         <td><Badge tipo="urgencia" valor={inc.urgencia} size="small" /></td>
                         <td><Badge tipo="estado" valor={inc.estado} size="small" /></td>
@@ -120,7 +155,7 @@ export default function PropiedadDetalle() {
                   <tbody>
                     {incidencias.map(inc => (
                       <tr key={inc.id} className="table-row-clickable" onClick={() => navigate(`/incidencias/${inc.id}`)}>
-                        <td className="td-id">{inc.id}</td>
+                        <td className="td-id">{inc.codigo || inc.id}</td>
                         <td className="td-title">{inc.titulo}</td>
                         <td>{inc.rubro}</td>
                         <td><Badge tipo="estado" valor={inc.estado} size="small" /></td>
@@ -173,6 +208,79 @@ export default function PropiedadDetalle() {
           </Card>
         </div>
       </div>
+
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Editar propiedad" size="large">
+        <form onSubmit={handleSubmit} className="form">
+          <div className="form-row">
+            <div className="form-group form-group-grow">
+              <label className="form-label">Dirección *</label>
+              <input className="form-input" value={form.direccion || ''} onChange={e => setForm(p => ({ ...p, direccion: e.target.value }))} autoFocus />
+            </div>
+            <div className="form-group form-group-sm">
+              <label className="form-label">Unidad</label>
+              <input className="form-input" value={form.unidad || ''} onChange={e => setForm(p => ({ ...p, unidad: e.target.value }))} />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Tipo</label>
+              <select className="form-input" value={form.tipo || ''} onChange={e => setForm(p => ({ ...p, tipo: e.target.value }))}>
+                {TIPOS.map(t => <option key={t}>{t}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Barrio</label>
+              <input className="form-input" value={form.barrio || ''} onChange={e => setForm(p => ({ ...p, barrio: e.target.value }))} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Ciudad</label>
+              <input className="form-input" value={form.ciudad || ''} onChange={e => setForm(p => ({ ...p, ciudad: e.target.value }))} />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Ambientes</label>
+              <input className="form-input" type="number" min="1" value={form.ambientes || ''} onChange={e => setForm(p => ({ ...p, ambientes: e.target.value }))} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Superficie (m²)</label>
+              <input className="form-input" type="number" min="1" value={form.metros || ''} onChange={e => setForm(p => ({ ...p, metros: e.target.value }))} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Alquiler mensual ($)</label>
+              <input className="form-input" type="number" min="0" value={form.alquilerMensual || ''} onChange={e => setForm(p => ({ ...p, alquilerMensual: e.target.value }))} />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Estado contrato</label>
+              <select className="form-input" value={form.estadoContrato || ''} onChange={e => setForm(p => ({ ...p, estadoContrato: e.target.value }))}>
+                {ESTADOS_CONTRATO.map(e => <option key={e}>{e}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Inicio contrato</label>
+              <input className="form-input" type="date" value={form.fechaInicioContrato || ''} onChange={e => setForm(p => ({ ...p, fechaInicioContrato: e.target.value }))} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Fin contrato</label>
+              <input className="form-input" type="date" value={form.fechaFinContrato || ''} onChange={e => setForm(p => ({ ...p, fechaFinContrato: e.target.value }))} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Propietario</label>
+            <select className="form-input" value={form.propietarioId || ''} onChange={e => setForm(p => ({ ...p, propietarioId: e.target.value }))}>
+              <option value="">— Sin asignar —</option>
+              {propietarios.map(o => <option key={o.id} value={o.id}>{o.nombre}</option>)}
+            </select>
+          </div>
+          {error && <p className="form-error">{error}</p>}
+          <div className="form-actions">
+            <button type="button" className="btn btn-ghost" onClick={() => setModalOpen(false)}>Cancelar</button>
+            <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? 'Guardando…' : 'Guardar'}</button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

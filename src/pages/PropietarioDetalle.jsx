@@ -1,19 +1,43 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Card from '../components/common/Card';
 import Badge from '../components/common/Badge';
+import Modal from '../components/common/Modal';
 import { formatDate, formatCurrency } from '../utils/helpers';
-import { ArrowLeft, User, Phone, Mail, Building2, AlertTriangle, Clock } from 'lucide-react';
+import { ArrowLeft, User, Phone, Mail, Building2, AlertTriangle, Clock, Pencil } from 'lucide-react';
 
 export default function PropietarioDetalle() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { propietarios, propiedades, getInquilino, getIncidenciasPorPropietario } = useApp();
+  const { propietarios, propiedades, getInquilino, getIncidenciasPorPropietario, editarPropietario } = useApp();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [form, setForm] = useState({});
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
 
   const owner = propietarios.find(o => o.id === id);
   if (!owner) return <div className="empty-state"><p>Propietario no encontrado</p><button className="btn btn-primary" onClick={() => navigate('/propietarios')}>Volver</button></div>;
 
-  const props = propiedades.filter(p => owner.propiedades.includes(p.id));
+  const openEditar = () => {
+    setForm({ nombre: owner.nombre || '', email: owner.email || '', telefono: owner.telefono || '', dni: owner.dni || '', cuit: owner.cuit || '' });
+    setError('');
+    setModalOpen(true);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.nombre.trim()) { setError('El nombre es obligatorio.'); return; }
+    if (!form.dni.trim()) { setError('El DNI es obligatorio.'); return; }
+    if (!form.cuit.trim()) { setError('El CUIT es obligatorio.'); return; }
+    setSaving(true);
+    const ok = await editarPropietario(id, form);
+    setSaving(false);
+    if (!ok) { setError('Error al guardar.'); return; }
+    setModalOpen(false);
+  };
+
+  const props = propiedades.filter(p => p.propietarioId === owner.id);
   const incidencias = getIncidenciasPorPropietario(owner.id);
   const pendientes = incidencias.filter(i => i.estado === 'Pendiente de aprobación');
   const recientes = [...incidencias].sort((a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion)).slice(0, 10);
@@ -23,6 +47,9 @@ export default function PropietarioDetalle() {
       <div className="detalle-header">
         <button className="btn btn-ghost" onClick={() => navigate('/propietarios')}>
           <ArrowLeft size={18} /> Volver
+        </button>
+        <button className="btn btn-secondary" onClick={openEditar}>
+          <Pencil size={15} /> Editar
         </button>
         <div className="detalle-title-row">
           <div className="owner-detail-header">
@@ -82,7 +109,7 @@ export default function PropietarioDetalle() {
                       const prop = propiedades.find(p => p.id === inc.propiedadId);
                       return (
                         <tr key={inc.id} className="table-row-clickable" onClick={() => navigate(`/incidencias/${inc.id}`)}>
-                          <td className="td-id">{inc.id}</td>
+                          <td className="td-id">{inc.codigo || inc.id}</td>
                           <td className="td-title">{inc.titulo}</td>
                           <td>{prop ? `${prop.direccion}, ${prop.unidad}` : '—'}</td>
                           <td><Badge tipo="urgencia" valor={inc.urgencia} size="small" /></td>
@@ -113,7 +140,7 @@ export default function PropietarioDetalle() {
                   <tbody>
                     {recientes.map(inc => (
                       <tr key={inc.id} className="table-row-clickable" onClick={() => navigate(`/incidencias/${inc.id}`)}>
-                        <td className="td-id">{inc.id}</td>
+                        <td className="td-id">{inc.codigo || inc.id}</td>
                         <td className="td-title">{inc.titulo}</td>
                         <td><Badge tipo="estado" valor={inc.estado} size="small" /></td>
                         <td><Badge tipo="urgencia" valor={inc.urgencia} size="small" /></td>
@@ -157,6 +184,38 @@ export default function PropietarioDetalle() {
           </Card>
         </div>
       </div>
+
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Editar propietario">
+        <form onSubmit={handleSubmit} className="form">
+          <div className="form-group">
+            <label className="form-label">Nombre completo *</label>
+            <input className="form-input" name="nombre" value={form.nombre || ''} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))} autoFocus />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input className="form-input" name="email" type="email" value={form.email || ''} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Teléfono</label>
+            <input className="form-input" name="telefono" value={form.telefono || ''} onChange={e => setForm(p => ({ ...p, telefono: e.target.value }))} />
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">DNI *</label>
+              <input className="form-input" name="dni" value={form.dni || ''} onChange={e => setForm(p => ({ ...p, dni: e.target.value }))} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">CUIT *</label>
+              <input className="form-input" name="cuit" value={form.cuit || ''} onChange={e => setForm(p => ({ ...p, cuit: e.target.value }))} />
+            </div>
+          </div>
+          {error && <p className="form-error">{error}</p>}
+          <div className="form-actions">
+            <button type="button" className="btn btn-ghost" onClick={() => setModalOpen(false)}>Cancelar</button>
+            <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? 'Guardando…' : 'Guardar'}</button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
